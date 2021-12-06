@@ -54,6 +54,7 @@ provider:
             - 'dynamodb:GetItem'
             - 'dynamodb:DeleteItem'
             - 'dynamodb:Scan'
+            - 'dynamodb:Query'
           Resource:
             - { 'Fn::GetAtt': ['ToDoListTable', 'Arn'] }
 

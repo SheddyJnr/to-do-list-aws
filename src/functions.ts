@@ -13,6 +13,23 @@ interface ToDoListI {
   completed: boolean,
 }
 
+//Helper function to get the id of a specific list item
+const fetchProductById = async (id: string) => {
+  const checkForID = await dbClient.get({
+    TableName: tableName,
+    Key: {
+      toDoListID: id,
+    }
+  }).promise()
+
+  if (!checkForID.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify(({ error: 'item not found' }), null, 2)
+    }
+  }
+}
+
 //This function is responsible for adding a new item to the To-Do List
 export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const reqData = JSON.parse(event.body as string) as ToDoListI
@@ -41,21 +58,9 @@ export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewa
 export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const reqData = JSON.parse(event.body as string) as ToDoListI
 
-  const id = event.pathParameters?.id
+  const id = event.pathParameters?.id as string
 
-  const checkForID = await dbClient.get({
-    TableName: tableName,
-    Key: {
-      toDoListID: id,
-    }
-  }).promise()
-
-  if (!checkForID.Item) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify(({ error: 'item not found' }), null, 2)
-    }
-  }
+  await fetchProductById(id)
 
   const updatedAt = new Date
 
@@ -100,19 +105,7 @@ export const deleteListItem = async (event: APIGatewayProxyEvent): Promise<APIGa
 
   const id = event.pathParameters?.id as string
 
-  const checkForID = await dbClient.get({
-    TableName: tableName,
-    Key: {
-      toDoListID: id,
-    }
-  }).promise()
-
-  if (!checkForID.Item) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify(({ error: 'item not found' }), null, 2)
-    }
-  }
+  await fetchProductById(id)
 
   await dbClient.delete({
     TableName: tableName,
