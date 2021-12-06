@@ -37,7 +37,7 @@ export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewa
   };
 };
 
-//This function updates a To-do list item based onthe id
+//This function updates a To-do list item based on the id
 export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const reqData = JSON.parse(event.body as string) as ToDoListI
 
@@ -53,7 +53,7 @@ export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGa
   if (!checkForID.Item) {
     return {
       statusCode: 404,
-      body: JSON.stringify({ error: 'item not found' })
+      body: JSON.stringify(({ error: 'item not found' }), null, 2)
     }
   }
 
@@ -74,4 +74,23 @@ export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGa
     statusCode: 200,
     body: JSON.stringify((listItem), null, 2),
   };
+}
+
+//This function gets and displays all the items in on the To-do list
+export const showAllItems = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  const getItems = await dbClient.scan({
+    TableName: tableName,
+  }).promise()
+
+  if (getItems.Items?.length === 0) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify(({ error: 'No items available' }), null, 2)
+    }
+  }
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify((getItems.Items), null, 2)
+  }
 }
