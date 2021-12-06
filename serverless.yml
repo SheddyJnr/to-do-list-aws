@@ -71,25 +71,25 @@ provider:
 
 functions:
   addNewItem:
-    handler: src/handlers.addNewItem
+    handler: src/functions.addNewItem
     events:
       - httpApi:
           path: /item
           method: post
   listAllItems:
-    handler: src/handlers.showAllItems
+    handler: src/functions.showAllItems
     events:
       - httpApi:
           path: /items
           method: get
   updateItem:
-    handler: src/handlers.updateListItem
+    handler: src/functions.updateListItem
     events:
       - httpApi:
           path: /item/{id}
           method: put
   deleteItem:
-    handler: src/handlers.deleteListItem
+    handler: src/functions.deleteListItem
     events:
       - httpApi:
           path: /item/{id}
