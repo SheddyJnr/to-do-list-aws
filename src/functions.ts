@@ -94,3 +94,35 @@ export const showAllItems = async (event: APIGatewayProxyEvent): Promise<APIGate
     body: JSON.stringify((getItems.Items), null, 2)
   }
 }
+
+//This funcition is responsible for deleting an entry based on the id
+export const deleteListItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+
+  const id = event.pathParameters?.id as string
+
+  const checkForID = await dbClient.get({
+    TableName: tableName,
+    Key: {
+      toDoListID: id,
+    }
+  }).promise()
+
+  if (!checkForID.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify(({ error: 'item not found' }), null, 2)
+    }
+  }
+
+  await dbClient.delete({
+    TableName: tableName,
+    Key: {
+      toDoListID: id,
+    },
+  }).promise()
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(({ success: 'Item deleted successfuly!' }), null, 2),
+  };
+}
