@@ -108,11 +108,14 @@ export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGa
 
     await fetchProductById(id)
 
-    const updatedAt = new Date
+    const createdAt = Date().toString()
+
+    const updatedAt = new Date().toISOString()
 
     const listItem = {
       toDoListID: v4(),
       ...reqData,
+      createdAt,
       updatedAt,
     }
 
