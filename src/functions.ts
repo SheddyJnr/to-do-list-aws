@@ -1,9 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from 'aws-sdk'
-import { timeStamp } from "console";
-import { networkInterfaces } from "os";
 import { v4 } from 'uuid'
-
 
 const dbClient = new AWS.DynamoDB.DocumentClient()
 const tableName = 'ToDoListTable'
