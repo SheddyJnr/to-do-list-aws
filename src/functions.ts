@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import AWS from 'aws-sdk'
 import { timeStamp } from "console";
+import { networkInterfaces } from "os";
 import { v4 } from 'uuid'
 
 
@@ -16,13 +17,13 @@ interface ToDoListI {
 export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const reqData = JSON.parse(event.body as string) as ToDoListI
 
-  const actionTimeStamp = new Date()
+  const actionTimeStamp = new Date().toISOString()
 
   const listItem = {
     toDoListID: v4(),
     ...reqData,
-    createdAt: String(actionTimeStamp),
-    updatedAt: String(actionTimeStamp),
+    createdAt: actionTimeStamp,
+    updatedAt: actionTimeStamp,
   }
 
   await dbClient.put({
