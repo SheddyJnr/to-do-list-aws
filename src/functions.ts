@@ -56,4 +56,22 @@ export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGa
       body: JSON.stringify({ error: 'item not found' })
     }
   }
+
+  const updatedAt = new Date
+
+  const listItem = {
+    toDoListID: v4(),
+    ...reqData,
+    updatedAt,
+  }
+
+  await dbClient.put({
+    TableName: tableName,
+    Item: listItem,
+  }).promise()
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify((listItem), null, 2),
+  };
 }
