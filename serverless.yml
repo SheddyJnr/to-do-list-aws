@@ -18,7 +18,7 @@ service: products-api
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
-frameworkVersion: "2"
+frameworkVersion: '2'
 
 provider:
   name: aws
@@ -50,12 +50,12 @@ provider:
       statements:
         - Effect: Allow
           Action:
-            - "dynamodb:PutItem"
-            - "dynamodb:GetItem"
-            - "dynamodb:DeleteItem"
-            - "dynamodb:Scan"
+            - 'dynamodb:PutItem'
+            - 'dynamodb:GetItem'
+            - 'dynamodb:DeleteItem'
+            - 'dynamodb:Scan'
           Resource:
-            - { "Fn::GetAtt": ["ToDoListTable", "Arn"] }
+            - { 'Fn::GetAtt': ['ToDoListTable', 'Arn'] }
 
 # you can define service wide environment variables here
 #  environment:
@@ -76,18 +76,18 @@ functions:
       - httpApi:
           path: /item
           method: post
-  listAllItems:
-    handler: src/functions.showAllItems
-    events:
-      - httpApi:
-          path: /items
-          method: get
   updateItem:
     handler: src/functions.updateListItem
     events:
       - httpApi:
           path: /item/{id}
           method: put
+  listAllItems:
+    handler: src/functions.showAllItems
+    events:
+      - httpApi:
+          path: /items
+          method: get
   deleteItem:
     handler: src/functions.deleteListItem
     events:

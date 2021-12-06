@@ -4,6 +4,7 @@ import { v4 } from 'uuid'
 
 
 const dbClient = new AWS.DynamoDB.DocumentClient()
+const tableName = 'ToDoListTable'
 
 interface ToDoListI {
   label: string,
@@ -26,7 +27,7 @@ export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewa
   }
 
   await dbClient.put({
-    TableName: 'ToDoListTable',
+    TableName: tableName,
     Item: listItem,
   }).promise()
 
@@ -35,3 +36,24 @@ export const addNewItem = async (event: APIGatewayProxyEvent): Promise<APIGatewa
     body: JSON.stringify((listItem), null, 2),
   };
 };
+
+//This function updates a To-do list item based onthe id
+export const updateListItem = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  const reqData = JSON.parse(event.body as string) as ToDoListI
+
+  const id = event.pathParameters?.id
+
+  const checkForID = await dbClient.get({
+    TableName: tableName,
+    Key: {
+      toDoListID: id,
+    }
+  }).promise()
+
+  if (!checkForID.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ error: 'item not found' })
+    }
+  }
+}
