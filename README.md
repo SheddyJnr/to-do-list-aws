@@ -23,3 +23,7 @@ Serverless Framework template for zero-config TypeScript support.
 
 5. Finally run the command `sls deploy` or `serverless deploy` in the project root directory and you will get the endpoints in the terminal window
 
+6. Testing of the endpoints is done using postman(you may use any other api testing tools like insomnia etc. 
+   Web browser  also work for GET requests).
+   - the request body is sent as a JSON object with the payload containing a string parameter: "label" and a boolean: completed.
+
